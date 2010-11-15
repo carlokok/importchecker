@@ -1,0 +1,12 @@
+simple tool that can create and compare an xml file from the imported libraries a dll uses.
+
+Usage: ImportChecker [Options] files
+
+Options:
+  -e, --excludelibrary=VALUE Exclude an assembly name (accepts standard path filters * and ?), just the name part
+  -i, --includelibrary=VALUE Include an assembly name (accepts standard path filters * and ?), just the name part
+  -o, --output=VALUE         Output to a file
+  -s, --searchpath=VALUE     Add a search path
+      --help                 Show help
+      --create               Create an xml file (-o, and 1 or more dlls as input)
+      --check                Compare an xml file against the existing dlls (1 or more xml files as input)

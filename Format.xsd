@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="importchecker" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+  <xs:element name="importchecker">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="library" type="ImportedLibrary" minOccurs="0" maxOccurs="unbounded" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  
+  <xs:simpleType name="ElementType">
+    <xs:restriction base="xs:string">
+	  <xs:enumeration value="method" />
+	  <xs:enumeration value="field" />
+	</xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="ImportedLibrary">
+    <xs:sequence>
+      <xs:element name="type" minOccurs="0" maxOccurs="unbounded" type="ImportedType" />
+    </xs:sequence>
+    <xs:attribute name="name" type="xs:string" />
+    <xs:attribute name="fullname" type="xs:string" />
+  </xs:complexType>
+
+  <xs:complexType name="ImportedType">
+    <xs:sequence>
+      <xs:element name="members" minOccurs="0" maxOccurs="1">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="member" minOccurs="0" maxOccurs="unbounded" type="ImportedMember" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+      <xs:element name="implemented" minOccurs="0" maxOccurs="1">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="member" minOccurs="0" maxOccurs="unbounded" type="ImplementedMember" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="name" type="xs:string" />
+    <xs:attribute name="kind" type="ElementType" />
+  </xs:complexType>
+
+  <xs:complexType name="ImportedMember">
+    <xs:sequence>
+      <xs:element name="signature" type="xs:string" minOccurs="0" maxOccurs="1" />
+    </xs:sequence>
+    <xs:attribute name="name" type="xs:string" />
+    <xs:attribute name="kind" type="ElementType" />
+  </xs:complexType>
+
+  <xs:complexType name="ImplementedMember">
+    <xs:sequence>
+      <xs:element name="signature" type="xs:string" minOccurs="0" maxOccurs="1" />
+    </xs:sequence>
+    <xs:attribute name="name" type="xs:string" />
+  </xs:complexType>
+</xs:schema>

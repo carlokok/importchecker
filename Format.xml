@@ -1,0 +1,20 @@
+<importchecker>
+	<library name="MonoDevelop.dll">
+		<type name="Full.Type.Name.Here" kind="interface">
+			<member name="whatever" kind="method">
+				<type>typesig</type>
+				<parameters>
+				<parameter>typesig</parameter>
+				<parameter/>
+				</parameters>
+				<usedbys>
+					<usedby library="name" type="type" method="method" />
+					<usedby />
+				</usedbys>
+			</member>
+			<member />
+		</type>
+		<type />
+	</library>
+	<library/>
+</importchecker>
