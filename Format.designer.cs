@@ -94,13 +94,13 @@ namespace ImportChecker
 
         private List<ImportedMember> membersField;
 
+        private bool implementedByTypeField;
+
+        private bool implementedByTypeFieldSpecified;
+
         private List<ImplementedMember> implementedField;
 
         private string nameField;
-
-        private ElementType kindField;
-
-        private bool kindFieldSpecified;
 
         public ImportedType()
         {
@@ -119,6 +119,31 @@ namespace ImportChecker
             set
             {
                 this.membersField = value;
+            }
+        }
+
+        public bool implementedByType
+        {
+            get
+            {
+                return this.implementedByTypeField;
+            }
+            set
+            {
+                this.implementedByTypeField = value;
+            }
+        }
+
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool implementedByTypeSpecified
+        {
+            get
+            {
+                return this.implementedByTypeFieldSpecified;
+            }
+            set
+            {
+                this.implementedByTypeFieldSpecified = value;
             }
         }
 
@@ -145,31 +170,6 @@ namespace ImportChecker
             set
             {
                 this.nameField = value;
-            }
-        }
-
-        public ElementType kind
-        {
-            get
-            {
-                return this.kindField;
-            }
-            set
-            {
-                this.kindField = value;
-            }
-        }
-
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool kindSpecified
-        {
-            get
-            {
-                return this.kindFieldSpecified;
-            }
-            set
-            {
-                this.kindFieldSpecified = value;
             }
         }
     }

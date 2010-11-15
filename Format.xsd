@@ -31,6 +31,7 @@
           </xs:sequence>
         </xs:complexType>
       </xs:element>
+      <xs:element name="implementedByType" type="xs:boolean" minOccurs="0" maxOccurs="1"/>
       <xs:element name="implemented" minOccurs="0" maxOccurs="1">
         <xs:complexType>
           <xs:sequence>
@@ -40,7 +41,6 @@
       </xs:element>
     </xs:sequence>
     <xs:attribute name="name" type="xs:string" />
-    <xs:attribute name="kind" type="ElementType" />
   </xs:complexType>
 
   <xs:complexType name="ImportedMember">

@@ -126,7 +126,9 @@ namespace ImportChecker
             ImportedType it = ImportType(tref);
             if (it != null)
             {
-                if (it.implemented != null) return; // already done
+                if (it.implementedByType) return; // already done
+                it.implementedByType = true;
+                it.implementedByTypeSpecified = true;
                 it.implemented = new List<ImplementedMember>();
                 TypeDefinition type = tref.Resolve();
                 foreach (var el in type.Methods) // at this point we have to presume the current class implements them all
@@ -170,6 +172,43 @@ namespace ImportChecker
         private ImportedType ImportType(TypeReference tref)
         {
             if (tref == null) return null;
+            switch (tref.MetadataType)
+            {
+                case MetadataType.Pointer:
+                case MetadataType.Pinned:
+                case MetadataType.Array:
+                    ImportType(tref.GetElementType());
+                    return null;
+                    case MetadataType.OptionalModifier:
+                case MetadataType.RequiredModifier:
+
+                case MetadataType.ByReference:
+                    return ImportType(tref.GetElementType());
+                case MetadataType.Boolean:
+                case MetadataType.Byte:
+                case MetadataType.Char:
+                case MetadataType.Double:
+                case MetadataType.FunctionPointer:
+                case MetadataType.GenericInstance:
+                case MetadataType.Int16:
+                case MetadataType.Int32:
+                case MetadataType.Int64:
+                case MetadataType.IntPtr:
+                case MetadataType.MVar:
+                case MetadataType.Object:
+                case MetadataType.SByte:
+                case MetadataType.Single:
+                case MetadataType.String:
+                case MetadataType.UInt16:
+                case MetadataType.UInt32:
+                case MetadataType.UInt64:
+                case MetadataType.UIntPtr:
+                case MetadataType.ValueType:
+                case MetadataType.Var:
+                case MetadataType.Void:
+                case MetadataType.TypedByReference:
+                    return null;
+            }
             if (tref is GenericInstanceType)
             {
                 GenericInstanceType gt = (GenericInstanceType)tref;

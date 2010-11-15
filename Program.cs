@@ -181,7 +181,85 @@ namespace ImportChecker
 
         private static bool CheckImports(importchecker check)
         {
-            throw new NotImplementedException();
+            bool ok = true;
+            foreach (var el in check.library)
+            {
+                AssemblyDefinition ad = Program.resolver.Resolve(el.fullname);
+
+                foreach (var type in el.type) {
+                    if (!CheckType(ad, type))
+                        ok = false;
+                }
+            }
+            return ok;
+        }
+
+        private static bool CheckType(AssemblyDefinition ad, ImportedType type)
+        {
+            TypeDefinition td = ad.Modules.SelectMany(a => a.Types).FirstOrDefault(a => a.FullName == type.name);
+            if (td == null) {
+                Log("Missing type: {0}", type.name);
+                return false;
+            }
+            bool ok = true;
+            if (td.IsInterface && type.implementedByTypeSpecified && type.implementedByType)
+            {
+                for (int i = 0; i < td.Methods.Count; i++)
+                {
+                    if (!type.implemented.Any(a => a.signature == td.Methods[i].FullName))
+                    {
+                        Log("Interface {0} has new interface member that did not exist before: {1}", type.name, td.Methods[i].FullName);
+                        ok = false;
+                    }
+                }
+            }
+            else if (type.implemented != null) // overrides
+            {
+                if (td.IsSealed || ! td.IsPublic) 
+                {
+                    ok = false;
+                    Log("Type is sealed or private while it should not be: {0}", type.name);
+                }
+                for (int i = 0; i < type.implemented.Count; i++) 
+                {
+                    if (!td.Methods.Any(a => a.FullName == type.implemented[i].signature))
+                    {
+                        Log("Type {0} has a method that was overriden in a subclass but no longer exists: {1}", type.name, type.implemented[i].signature);
+                        ok = false;
+                    }
+                }
+            }
+            for (int i = 0; i < type.members.Count; i++) 
+            {
+                switch (type.members[i].kind)
+                {
+                    case ElementType.field:
+                        if (!td.Fields.Any(a => a.FullName == type.members[i].signature))
+                        {
+                            ok = false;
+                            Log("Type {0} has a missing field: {1}", type.name, type.members[i].signature);
+                        }
+                        break;
+                    default:
+                        if (!td.Methods.Any(a => a.FullName == type.members[i].signature))
+                        {
+                            ok = false;
+                            Log("Type {0} has a missing method: {1}", type.name, type.members[i].signature);
+                        }
+                        break;
+                }
+            }
+            return ok;
+        }
+
+        private static void Log(string p)
+        {
+            Console.Error.WriteLine(p);
+        }
+
+        private static void Log(string p, params object[] args)
+        {
+            Console.Error.WriteLine(string.Format(p, args));
         }
 
         private static int Generate()
