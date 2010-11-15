@@ -10,3 +10,7 @@ Options:
       --help                 Show help
       --create               Create an xml file (-o, and 1 or more dlls as input)
       --check                Compare an xml file against the existing dlls (1 or more xml files as input)
+
+
+Requirements:
+- Cecil from https://github.com/jbevain/cecil checked out in cecil/ in this directory.
