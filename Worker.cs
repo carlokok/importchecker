@@ -168,6 +168,7 @@ namespace ImportChecker
                 mb.signature = ((MethodReference)mref).Resolve().FullName;
                 mb.kind = ElementType.method;
             }
+            mb.kindSpecified = true;
             memberCache.Add(mref, mb);
             return mb;
         }

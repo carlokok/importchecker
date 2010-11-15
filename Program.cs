@@ -196,7 +196,19 @@ namespace ImportChecker
 
         private static bool CheckType(AssemblyDefinition ad, ImportedType type)
         {
-            TypeDefinition td = ad.Modules.SelectMany(a => a.Types).FirstOrDefault(a => a.FullName == type.name);
+            TypeDefinition td = null;
+            string name = type.name;
+            if (name.Contains("/"))
+            {
+                name = name.Substring(0, name.IndexOf("/"));
+                td = ad.Modules.SelectMany(a => a.Types).FirstOrDefault(a => a.FullName == name);
+                foreach (var el in type.name.Substring(type.name.IndexOf("/") + 1).Split('/'))
+                {
+                    if (td == null) break;
+                    td = td.NestedTypes.FirstOrDefault(a => a.Name == el);
+                }
+            } else 
+                td = ad.Modules.SelectMany(a => a.Types).FirstOrDefault(a => a.FullName == name);
             if (td == null) {
                 Log("Missing type: {0}", type.name);
                 return false;
