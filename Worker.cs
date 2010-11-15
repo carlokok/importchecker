@@ -158,13 +158,16 @@ namespace ImportChecker
             ImportedMember mb = new ImportedMember();
             it.members.Add(mb);
             mb.name = mref.Name;
-            mb.signature = mref.FullName;
-
-            mb.kindSpecified = true;
             if (mref is FieldReference)
+            {
+                mb.signature = ((FieldReference)mref).Resolve().FullName;
                 mb.kind = ElementType.field;
+            }
             else
+            {
+                mb.signature = ((MethodReference)mref).Resolve().FullName;
                 mb.kind = ElementType.method;
+            }
             memberCache.Add(mref, mb);
             return mb;
         }

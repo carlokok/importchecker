@@ -213,7 +213,7 @@ namespace ImportChecker
                     }
                 }
             }
-            else if (type.implemented != null) // overrides
+            else if (type.implemented.Count > 0) // overrides
             {
                 if (td.IsSealed || ! td.IsPublic) 
                 {
@@ -346,13 +346,48 @@ namespace ImportChecker
         {
             for (int i =0; i < searchPath.Count; i++) {
                 string cmb = Path.Combine(searchPath[i], reference.Name);
-                if (File.Exists(cmb))
+                if (File.Exists(cmb+".dll"))
                 {
                     try
                     {
-                        ModuleDefinition md = ModuleDefinition.ReadModule(cmb);
-                        if (md.Assembly.Name.FullName == reference.FullName)
-                            return md.Assembly;
+                        ModuleDefinition md = ModuleDefinition.ReadModule(cmb+".dll");
+                        return md.Assembly;
+                    }
+                    catch
+                    {
+                        // could be bad input
+                    }
+                }
+                if (File.Exists(cmb + ".DLL"))
+                {
+                    try
+                    {
+                        ModuleDefinition md = ModuleDefinition.ReadModule(cmb + ".DLL");
+                        return md.Assembly;
+                    }
+                    catch
+                    {
+                        // could be bad input
+                    }
+                }
+                if (File.Exists(cmb + ".exe"))
+                {
+                    try
+                    {
+                        ModuleDefinition md = ModuleDefinition.ReadModule(cmb + ".exe");
+                        return md.Assembly;
+                    }
+                    catch
+                    {
+                        // could be bad input
+                    }
+                }
+                if (File.Exists(cmb + ".EXE"))
+                {
+                    try
+                    {
+                        ModuleDefinition md = ModuleDefinition.ReadModule(cmb + ".EXE");
+                        return md.Assembly;
                     }
                     catch
                     {
